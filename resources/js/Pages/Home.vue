@@ -1,6 +1,6 @@
 <template>
-    <Head title="Welcome"/>
-    
+    <Head title="Home"/>
+
 
 </template>
 
@@ -11,10 +11,6 @@ import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 export default {
     layout: DefaultLayout,
     components: { Head, Link },
-    props: {
-        canLogin: Boolean,
-        canRegister: Boolean,
-    }
 }
 </script>
 

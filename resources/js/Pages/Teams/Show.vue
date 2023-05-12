@@ -1,4 +1,5 @@
 <script setup>
+import {Head} from "@inertiajs/vue3";
 import DeleteTeamForm from '@/Pages/Teams/Partials/DeleteTeamForm.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import TeamMemberManager from '@/Pages/Teams/Partials/TeamMemberManager.vue';
@@ -13,6 +14,7 @@ defineProps({
 
 <template>
     <div>
+        <Head title="Team Settings" />
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <UpdateTeamNameForm :team="team" :permissions="permissions"/>
 

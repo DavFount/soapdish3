@@ -1,17 +1,18 @@
 <script setup>
 import {Head} from "@inertiajs/vue3";
+import PageHeader from "@/Components/PageHeader.vue";
+import MainSection from "@/Components/MainSection.vue";
 </script>
 
 <template>
-    <Head title="Dashboard" />
-<!--    <template #header>Dashboard</template>-->
-    Body
+    <Head title="Dashboard"/>
+    a;sjdf;alskdjf;lkj
 </template>
 
 <script>
-import DefaultLayout from "@/Layouts/DefaultLayout.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 export default {
-    layout: DefaultLayout
+    layout: AdminLayout
 }
 </script>

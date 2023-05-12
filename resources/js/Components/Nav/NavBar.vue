@@ -18,7 +18,7 @@ const mobileMenu = {
 </script>
 
 <template>
-    <nav class="bg-gray-100 dark:bg-gray-800 border-b border-gray-400 dark:border-gray-600">
+    <nav class="fixed inset-0 z-50 h-16 bg-gray-100 dark:bg-gray-800 border-b-2 border-gray-400 dark:border-gray-600">
         <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
             <div class="relative flex h-16 items-center justify-between">
                 <div class="flex items-center px-2 lg:px-0">
@@ -27,10 +27,9 @@ const mobileMenu = {
                     </div>
                     <div class="hidden lg:ml-6 lg:block">
                         <div class="flex space-x-4">
-                            <NavBarItem :href="route('Home')" :active="$page.component === 'Home'">Home</NavBarItem>
-                            <NavBarItem :href="route('Home')" :active="$page.component === 'Studies'">Studies
-                            </NavBarItem>
-                            <NavBarItem :href="route('community.index')" :active="$page.component === 'Community/Index'" v-text="'Community'" />
+                            <NavBarItem :href="route('Home')" :active="$page.component === 'Home'" v-text="'Home'" />
+                            <NavBarItem :href="route('Home')" :active="$page.component === 'Studies'" v-text="'Studies'" />
+                            <NavBarItem :href="route('dashboard')" :active="$page.component === 'Dashboard'" v-text="'Dashboard'" v-if="$page.props.auth.user"/>
                         </div>
                     </div>
                 </div>

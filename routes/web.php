@@ -6,6 +6,10 @@ use Inertia\Inertia;
 
 Route::inertia('/', 'Home')->name('Home');
 
+Route::post('/contact/submit', function() {
+   return true;
+})->name('send-contact-form');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

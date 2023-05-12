@@ -32,7 +32,6 @@ import DropdownLink from "@/Components/DropdownLink.vue";
                     Manage Account
                 </div>
 
-                <DropdownLink :href="route('dashboard')" :active="$page.component == 'Dashboard'" v-text="'Dashboard'" />
                 <DropdownLink :href="route('profile.show')" :active="$page.component == 'Profile/Show'" v-text="'Profile'" />
                 <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" :active="$page.component == 'API/Index'" v-text="'API Keys'" />
 

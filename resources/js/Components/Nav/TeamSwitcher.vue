@@ -1,5 +1,5 @@
 <script setup>
-import {router} from "@inertiajs/vue3";
+import {Link, router} from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 
@@ -13,8 +13,7 @@ const switchToTeam = (team) => {
 </script>
 
 <template>
-    <div class="ml-3 relative">
-        <!-- Teams Dropdown -->
+    <div class="relative">
         <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
             <template #trigger>
                 <span class="inline-flex rounded-md">
@@ -58,21 +57,26 @@ const switchToTeam = (team) => {
                             </div>
 
                             <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
-                                <form @submit.prevent="switchToTeam(team)">
-                                    <DropdownLink as="button">
-                                        <div class="flex items-center">
-                                            <svg v-if="team.id == $page.props.auth.user.current_team_id"
-                                                 class="mr-2 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg"
-                                                 fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                                 stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            </svg>
+                                <button :active="team.id == $page.props.auth.user.current_team_id"
+                                        class="block px-4 py-2 text-sm leading-5 text-gray-700 dark:text-gray-300 transition duration-150 ease-in-out w-full"
+                                        :class="{
+                                            'bg-gray-100 dark:bg-gray-800': active,
+                                            'hover:bg-gray-100 dark:hover:bg-gray-800': ! active,
+                                          }"
+                                        @click="switchToTeam(team)"
+                                    >
+                                    <div class="flex items-center">
+                                        <svg v-if="team.id == $page.props.auth.user.current_team_id"
+                                             class="mr-2 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg"
+                                             fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                             stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
 
-                                            <div>{{ team.name }}</div>
-                                        </div>
-                                    </DropdownLink>
-                                </form>
+                                        <div>{{ team.name }}</div>
+                                    </div>
+                                </button>
                             </template>
                         </template>
                     </template>

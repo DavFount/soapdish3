@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Language;
+use App\Models\Translation;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -36,6 +38,15 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'lang' => fn() => Language::orderBy('name')->get(),
+            'translation' => function () {
+                return Translation::query()
+                    ->orderBy('abbreviation')
+                    ->when(auth()->user()?->language_id, function ($query) {
+                        $query->where('language_id', auth()->user()->language_id);
+                    })->get();
+            },
+            'flash' => fn() => $request->session()->get('message'),
         ]);
     }
 }

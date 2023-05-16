@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Request;
 
 class CommunityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('Community/Index', [
             'users' => User::query()
                 ->orderBy('name')
                 ->with('teams')
-                ->when(Request::input('search'), function ($query, $search) {
+                ->when($request->input('search'), function ($query, $search) {
                     $query->where('name', 'like', "%{$search}%");
                 })
                 ->whereHas('teams', function ($query) {
@@ -28,7 +28,6 @@ class CommunityController extends Controller
                     'avatar' => $user->profile_photo_url,
                     'title' => $user->title,
                     'description' => $user->description,
-                    'translation' => $user->translation,
                     'socials' => [
                         'facebook' => $user->facebook,
                         'twitter' => $user->twitter,
@@ -36,7 +35,7 @@ class CommunityController extends Controller
                     ],
                 ]),
 
-            'filters' => Request::only(['search'])
+            'filters' => $request->only(['search'])
         ]);
     }
 }

@@ -39,7 +39,7 @@ const show = ref(false);
                                             </MobileSidebarItem>
                                         </li>
                                         <li>
-                                            <MobileSidebarItem :href="route('dashboard')" :active="$page.component === 'Something'">
+                                            <MobileSidebarItem :href="route('community.index')" :active="$page.component === 'Community/Index'">
                                                 <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24"
                                                      stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                                     <path stroke-linecap="round" stroke-linejoin="round"

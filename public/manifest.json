@@ -1,0 +1,19 @@
+{
+    "name": "The SOAP Dish PWA",
+    "short_name": "SOAP Dish PWA",
+    "icons": [
+        {
+            "src": "/Logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "scope": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#000",
+    "description": "Your #1 stop for SOAP Bible Study.",
+    "dir": "ltr",
+    "lang": "en-US"
+}

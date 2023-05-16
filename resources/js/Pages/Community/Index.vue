@@ -4,7 +4,6 @@ import {Head, router} from "@inertiajs/vue3";
 import Card from "@/Components/Community/Card.vue";
 import Pagination from "@/Components/Pagination.vue";
 import MainSection from "@/Components/MainSection.vue";
-import PageHeader from "@/Components/PageHeader.vue";
 import debounce from "lodash/debounce";
 
 const props = defineProps({
@@ -22,10 +21,6 @@ watch(search, debounce(function (value) {
 <template>
     <div>
         <Head title="Community"/>
-
-        <PageHeader>
-            Team Members
-        </PageHeader>
 
         <MainSection>
 
@@ -106,9 +101,9 @@ watch(search, debounce(function (value) {
 </style>
 
 <script>
-import DefaultLayout from "@/Layouts/DefaultLayout.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 export default {
-    layout: DefaultLayout,
+    layout: AdminLayout,
 }
 </script>

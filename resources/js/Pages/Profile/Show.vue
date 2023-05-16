@@ -51,9 +51,9 @@ defineProps({
 </template>
 
 <script>
-import DefaultLayout from "@/Layouts/DefaultLayout.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 export default {
-    layout: DefaultLayout
+    layout: AdminLayout
 }
 </script>

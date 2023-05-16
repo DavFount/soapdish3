@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {Link, router, useForm} from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
@@ -19,7 +19,8 @@ const form = useForm({
     email: props.user.email,
     title: props.user.title,
     description: props.user.description,
-    translation: props.user.translation,
+    translation_id: props.user.translation_id,
+    language_id: props.user.language_id,
     facebook: props.user.facebook,
     twitter: props.user.twitter,
     instagram: props.user.instagram,
@@ -172,6 +173,24 @@ const clearPhotoFileInput = () => {
                 <InputError :message="form.errors.description" class="mt-2"/>
             </div>
 
+            <!-- Language -->
+            <div class="col-span-6 sm:col-span-4">
+                <InputLabel for="language_id" value="Language"/>
+                <select id="language_id" v-model="form.language_id" class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
+                    <option v-for="language in $page.props.lang" :key="language.id" :value="language.id">{{ language.name }}</option>
+                </select>
+                <InputError :message="form.errors.language_id" class="mt-2"/>
+            </div>
+
+            <!-- Translation -->
+            <div class="col-span-6 sm:col-span-4">
+                <InputLabel for="translation_id" value="Translation"/>
+                <select id="translation_id" v-model="form.translation_id" class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
+                    <option v-for="translation in $page.props.translation" :key="translation.id" :value="translation.id">{{ translation.abbreviation }} - {{ translation.name }}</option>
+                </select>
+                <InputError :message="form.errors.translation_id" class="mt-2"/>
+            </div>
+
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="email" value="Email"/>
@@ -183,23 +202,6 @@ const clearPhotoFileInput = () => {
                     autocomplete="username"
                 />
                 <InputError :message="form.errors.email" class="mt-2"/>
-            </div>
-
-            <!-- Translation -->
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="translation" value="Translation" />
-                <select v-model="form.translation" class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                    <option>ASV</option>
-                    <option>BBE</option>
-                    <option>DARBY</option>
-                    <option>ESV</option>
-                    <option>KJV</option>
-                    <option>NIV</option>
-                    <option>NLT</option>
-                    <option>WEB</option>
-                    <option>YLT</option>
-                </select>
-                <InputError :message="form.errors.translation" class="mt-2" />
             </div>
 
             <!-- Facebook -->
@@ -249,7 +251,7 @@ const clearPhotoFileInput = () => {
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                        class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800"
                         @click.prevent="sendEmailVerification"
                     >
                         Click here to re-send the verification email.

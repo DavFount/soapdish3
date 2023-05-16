@@ -23,6 +23,8 @@
         "highlight.js": "^11.8.0",
         "lodash": "^4.17.21",
         "marked": "^5.0.2",
-        "nprogress": "^0.2.0"
+        "nprogress": "^0.2.0",
+        "vue-simple-search-dropdown": "^1.0.1",
+        "vue-toastification": "^2.0.0-rc.5"
     }
 }

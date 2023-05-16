@@ -1,6 +1,5 @@
 <script setup>
 import NavBar from "@/Components/Nav/NavBar.vue";
-import Banner from "@/Components/Banner.vue";
 </script>
 
 <template>
@@ -10,7 +9,7 @@ import Banner from "@/Components/Banner.vue";
             <div class="h-16"></div>
             <NavBar/>
 
-            <slot />
+            <slot/>
         </div>
     </div>
 </template>

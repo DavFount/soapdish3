@@ -6,7 +6,10 @@ import MainSection from "@/Components/MainSection.vue";
 
 <template>
     <Head title="Dashboard"/>
-    a;sjdf;alskdjf;lkj
+    a;sjdf;alskdjf;lkj <br />
+    a;sjdf;alskdjf;lkj <br />
+    a;sjdf;alskdjf;lkj <br />
+    a;sjdf;alskdjf;lkj <br />
 </template>
 
 <script>

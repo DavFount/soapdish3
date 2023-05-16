@@ -27,8 +27,8 @@ const mobileMenu = {
                     </div>
                     <div class="hidden lg:ml-6 lg:block">
                         <div class="flex space-x-4">
-                            <NavBarItem :href="route('Home')" :active="$page.component === 'Home'" v-text="'Home'" />
-                            <NavBarItem :href="route('Home')" :active="$page.component === 'Studies'" v-text="'Studies'" />
+                            <NavBarItem :href="route('home')" :active="$page.component === 'Home'" v-text="'Home'" />
+                            <NavBarItem :href="route('bible')" :active="$page.component === 'Bible/Index'" v-text="'Bible'" />
                             <NavBarItem :href="route('dashboard')" :active="$page.component === 'Dashboard'" v-text="'Dashboard'" v-if="$page.props.auth.user"/>
                         </div>
                     </div>

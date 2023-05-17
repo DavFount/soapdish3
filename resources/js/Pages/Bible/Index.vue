@@ -19,14 +19,16 @@ const chapter = ref(props.chapter_id ?? 'Select a chapter');
 const verseContainer = ref(null);
 const processing = ref(false);
 const bookChange = ref(null);
+const manualSelection = ref(false);
 
 onUpdated(() => {
     processing.value = false;
 
-    if(bookChange.value === 1) chapter.value = props.chapters[0].id;
+    if (bookChange.value === 1 || (manualSelection.value)) chapter.value = props.chapters[0].id;
     else if (bookChange.value === 0) chapter.value = props.chapters[props.chapters.length - 1].id;
 
     bookChange.value = null;
+    manualSelection.value = false;
 })
 
 const firstChapter = computed(() => {
@@ -49,7 +51,7 @@ watch(book, (newValue, oldValue) => {
     if (newValue === null || processing.value) return;
 
     processing.value = true;
-    if(newValue > oldValue) bookChange.value = 1; else bookChange.value = 0;
+    if (newValue > oldValue) bookChange.value = 1; else bookChange.value = 0;
 
     router.get(route('bible.book', {book: newValue}), {}, {
         preserveState: true,
@@ -102,6 +104,7 @@ const nextChapter = () => {
                 <div>
                     <InputLabel for="book" value="Book" class="sr-only"/>
                     <select
+                        @change="manualSelection = true"
                         v-model="book"
                         class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
                         <option disabled>Select a book</option>

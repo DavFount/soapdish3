@@ -62,4 +62,8 @@ class User extends Authenticatable
     public function translation() {
         return $this->belongsTo(Translation::class);
     }
+
+    public function prayerList() {
+        return $this->hasMany(PrayerList::class);
+    }
 }

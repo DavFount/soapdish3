@@ -3,9 +3,12 @@
 use App\Http\Controllers\BibleController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\LanguagesController;
+use App\Http\Controllers\PrayerListsController;
 use App\Http\Controllers\TranslationsController;
 use App\Models\Language;
+use App\Models\PrayerList;
 use App\Models\Translation;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -48,4 +51,12 @@ Route::middleware([
     Route::put('/translations/{translation}', [TranslationsController::class, 'update'])->can('update', Translation::class)->name('translations.update');
     Route::delete('/translations/{translation}', [TranslationsController::class, 'destroy'])->can('delete', Translation::class)->name('translations.delete');
     Route::get('/translations/{translation}/edit', [TranslationsController::class, 'edit'])->can('update', Translation::class)->name('translations.edit');
+
+    // Translation Routes
+    Route::get('/prayerlists', [PrayerListsController::class, 'index'])->name('prayerlist.index');
+    Route::post('/prayerlists', [PrayerListsController::class, 'store'])->name('prayerlist.store');
+    Route::get('/prayerlists/create', [PrayerListsController::class, 'create'])->name('prayerlist.create');
+    Route::put('/prayerlists/{prayerList}', [PrayerListsController::class, 'update'])->can('update', 'prayerList')->name('prayerlist.update');
+    Route::delete('/prayerlists/{prayerList}', [PrayerListsController::class, 'destroy'])->can('delete', 'prayerList')->name('prayerlist.delete');
+    Route::get('/prayerlists/{prayerList}/edit', [PrayerListsController::class, 'edit'])->can('update', 'prayerList')->name('prayerlist.edit');
 });

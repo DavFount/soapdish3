@@ -70,6 +70,8 @@ class TranslationsController extends Controller
                         Verse::create([
                             'number' => $verseIndex + 1,
                             'text' => $verse,
+                            'translation_id' => $translation->id,
+                            'book_id' => $b->id,
                             'chapter_id' => $c->id,
                         ]);
                     }

@@ -18,9 +18,15 @@ const book = ref(props.book_id ?? 'Select a book');
 const chapter = ref(props.chapter_id ?? 'Select a chapter');
 const verseContainer = ref(null);
 const processing = ref(false);
+const bookChange = ref(null);
 
 onUpdated(() => {
     processing.value = false;
+
+    if(bookChange.value === 1) chapter.value = props.chapters[0].id;
+    else if (bookChange.value === 0) chapter.value = props.chapters[props.chapters.length - 1].id;
+
+    bookChange.value = null;
 })
 
 const firstChapter = computed(() => {
@@ -39,10 +45,12 @@ const lastBook = computed(() => {
     return props.books && book.value === props.books[props.books.length - 1].id;
 });
 
-watch(book, (newValue) => {
-    if (newValue === null) return;
+watch(book, (newValue, oldValue) => {
+    if (newValue === null || processing.value) return;
 
     processing.value = true;
+    if(newValue > oldValue) bookChange.value = 1; else bookChange.value = 0;
+
     router.get(route('bible.book', {book: newValue}), {}, {
         preserveState: true,
         preserveScroll: false,
@@ -52,7 +60,7 @@ watch(book, (newValue) => {
 });
 
 watch(chapter, (newValue) => {
-    if (newValue === 'Select a chapter') return;
+    if (newValue === 'Select a chapter' || processing.value) return;
 
     processing.value = true;
     router.get(route('bible.chapter', {book: book.value, chapter: newValue}), {}, {
@@ -63,12 +71,14 @@ watch(chapter, (newValue) => {
 });
 
 const previousBook = () => {
-    if (firstBook || processing.value) return;
+    if (!firstBook || processing.value) return;
+    console.log('Prev Book Pressed');
     book.value--;
 }
 
 const nextBook = () => {
-    if (lastBook || processing.value) return;
+    if (!lastBook || processing.value) return;
+    console.log('Next Book Pressed');
     book.value++;
 }
 

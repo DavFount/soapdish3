@@ -4,8 +4,10 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Language;
+use App\Models\PrayerList;
 use App\Models\Translation;
 use App\Policies\LanguagePolicy;
+use App\Policies\PrayerListPolicy;
 use App\Policies\TranslationPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -19,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Translation::class => TranslationPolicy::class,
         Language::class => LanguagePolicy::class,
+        PrayerList::class => PrayerListPolicy::class,
     ];
 
     /**

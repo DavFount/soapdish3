@@ -14,6 +14,7 @@ const props = defineProps({
     chapter_id: Number
 });
 
+const showVersePopup = ref(false);
 const book = ref(props.book_id ?? 'Select a book');
 const chapter = ref(props.chapter_id ?? 'Select a chapter');
 const verseContainer = ref(null);
@@ -134,7 +135,7 @@ const nextChapter = () => {
         </div>
 
         <div ref="verseContainer" class="container overflow-y-scroll" v-else>
-            <VerseComponent v-for="verse in props.verses" :key="verse.id" v-if="props.verses"
+            <VerseComponent @click="showVersePopup = true" class="verse" v-for="verse in props.verses" :key="verse.id" v-if="props.verses"
                             :number="verse.number">
                 {{ verse.text }}
             </VerseComponent>

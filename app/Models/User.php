@@ -66,4 +66,8 @@ class User extends Authenticatable
     public function prayerList() {
         return $this->hasMany(PrayerList::class);
     }
+
+    public function verses() {
+        return $this->belongsToMany(Verse::class);
+    }
 }

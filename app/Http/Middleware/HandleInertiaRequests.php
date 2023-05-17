@@ -46,7 +46,7 @@ class HandleInertiaRequests extends Middleware
                         $query->where('language_id', auth()->user()->language_id);
                     })->get();
             },
-            'flash' => fn() => $request->session()->get('message'),
+            'flash' => fn() => $request->session()->get('flash'),
         ]);
     }
 }

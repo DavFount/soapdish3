@@ -36,7 +36,7 @@ class PrayerListsController extends Controller
 
         $request->user()->prayerList()->create($request->all());
 
-        return redirect()->route('prayerlist.index');
+        return redirect()->route('prayerlist.index')->with('flash', ['type' => 'success', 'message' => 'Prayer List Updated!']);
     }
 
     public function show(PrayerList $prayerList)
@@ -60,12 +60,12 @@ class PrayerListsController extends Controller
         $prayerList->update($request->all());
         $prayerList->save();
 
-        return redirect()->route('prayerlist.index');
+        return redirect()->route('prayerlist.index')->with('flash', ['type' => 'success', 'message' => 'Prayer List Updated!']);
     }
 
     public function destroy(PrayerList $prayerList)
     {
         $prayerList->delete();
-        return redirect()->route('prayerlist.index');
+        return redirect()->route('prayerlist.index')->with('flash', ['type' => 'error', 'message' => 'Prayer List Deleted!']);
     }
 }

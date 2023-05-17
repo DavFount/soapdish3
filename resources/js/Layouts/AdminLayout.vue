@@ -1,11 +1,22 @@
 <script setup>
 import NavBar from "@/Components/Nav/NavBar.vue";
-import {ref} from "vue";
+import {onUpdated, ref} from "vue";
 import MobileSidebar from "@/Components/Nav/Admin/MobileSidebar.vue";
 import Sidebar from "@/Components/Nav/Admin/Sidebar.vue";
+import {useToast} from "vue-toastification";
+import {usePage} from "@inertiajs/vue3";
 
 const show = ref(true);
+const toast = useToast();
+const page = usePage();
 
+onUpdated(() => {
+    if (page.props.flash) {
+        toast(page.props.flash.message, {
+            type: page.props.flash.type
+        });
+    }
+});
 
 </script>
 

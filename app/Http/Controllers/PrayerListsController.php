@@ -34,7 +34,7 @@ class PrayerListsController extends Controller
             'notes' => ['nullable', 'string']
         ]);
 
-        PrayerList::create($request->all());
+        $request->user()->prayerList()->create($request->all());
 
         return redirect()->route('prayerlist.index');
     }

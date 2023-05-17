@@ -11,14 +11,20 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import {ref} from "vue";
 
 const props = defineProps({
-    readOnly: Boolean,
-    action: String,
+    readOnly: {
+        type: Boolean,
+        default: false,
+    },
+    action: {
+        type: String,
+        default: 'create',
+    },
     translation: Object,
     languages: Object,
 })
 
 const form = useForm({
-    _method: 'POST',
+    _method: props.action === 'create' ? 'POST' : 'PUT',
     name: props.translation ? props.translation.name : '',
     abbreviation: props.translation ? props.translation.abbreviation : '',
     language_id: props.translation ? props.translation.language_id : '',

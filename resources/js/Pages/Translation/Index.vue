@@ -36,10 +36,6 @@ defineProps({
                         Language
                     </TableHeaderItem>
 
-                    <TableHeaderItem>
-                        Books
-                    </TableHeaderItem>
-
                     <TableHeaderItem class="sr-only">
                         Actions
                     </TableHeaderItem>
@@ -56,10 +52,6 @@ defineProps({
 
                     <TableBodyItem>
                         {{ translation.language.name }}
-                    </TableBodyItem>
-
-                    <TableBodyItem>
-                        {{ translation.books.length }}
                     </TableBodyItem>
 
                     <TableBodyItem class="flex gap-3 justify-end">

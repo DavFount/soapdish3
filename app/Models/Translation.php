@@ -17,9 +17,4 @@ class Translation extends Model
     {
         return $this->belongsTo(Language::class);
     }
-
-    public function books()
-    {
-        return $this->hasMany(Book::class);
-    }
 }

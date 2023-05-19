@@ -7,8 +7,8 @@ use App\Models\Chapter;
 use App\Models\Language;
 use App\Models\Translation;
 use App\Models\Verse;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class TranslationsController extends Controller
@@ -16,9 +16,9 @@ class TranslationsController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Translation/Index', [
-           'translations' => Translation::query()
+            'translations' => Translation::query()
                 ->orderBy('name')
-               ->with(['books', 'language'])
+                ->with(['language'])
                 ->when($request->input('search'), function ($query, $search) {
                     $query->where('name', 'like', "%{$search}%");
                 })
@@ -28,24 +28,17 @@ class TranslationsController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        return Inertia::render('Translation/Create', [
-            'languages' => Language::all()
-        ]);
-    }
-
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', Rule::unique('translations','name')],
+            'name' => ['required', 'string', 'max:255', Rule::unique('translations', 'name')],
             'abbreviation' => ['required', 'string', 'max:5', Rule::unique('translations', 'abbreviation')],
             'language_id' => ['required', Rule::exists('languages', 'id')],
             'file' => ['file', 'required', 'mimetypes:application/json,text/plain']
         ]);
 
         $file = $request->file('file');
-        if($file->isReadable()) {
+        if ($file->isReadable()) {
             $contents = $file->getContent();
             $json = json_decode($contents, true);
 
@@ -55,17 +48,24 @@ class TranslationsController extends Controller
                 'language_id' => $request->language_id,
             ]);
 
-            foreach($json as $book) {
-                $b = Book::create([
-                    'name' => $book['name'],
-                    'number' => $book['number'],
-                    'translation_id' => $translation->id
-                ]);
-                foreach($book['chapters'] as $index => $chapter) {
-                    $c = Chapter::create([
-                       'book_id' => $b->id,
-                        'number' => $index + 1,
+            foreach ($json as $book) {
+                $b = Book::where('name', $book['name'])->first();
+                if (!$b) {
+                    $b = Book::create([
+                        'name' => $book['name'],
+                        'number' => $book['number'],
                     ]);
+                }
+                foreach ($book['chapters'] as $index => $chapter) {
+                    $cNumber = $index + 1;
+                    $c = Chapter::where('number', $cNumber)->where('book_id', $b->id)->first();
+
+                    if (!$c) {
+                        $c = Chapter::create([
+                            'book_id' => $b->id,
+                            'number' => $cNumber,
+                        ]);
+                    }
                     foreach ($chapter as $verseIndex => $verse) {
                         Verse::create([
                             'number' => $verseIndex + 1,
@@ -79,6 +79,13 @@ class TranslationsController extends Controller
             }
         }
         return redirect()->route('translations.index');
+    }
+
+    public function create()
+    {
+        return Inertia::render('Translation/Create', [
+            'languages' => Language::all()
+        ]);
     }
 
     public function show(Translation $translation)
@@ -97,7 +104,7 @@ class TranslationsController extends Controller
     public function update(Request $request, Translation $translation)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', Rule::unique('translations','name')->ignore($translation->id)],
+            'name' => ['required', 'string', 'max:255', Rule::unique('translations', 'name')->ignore($translation->id)],
             'abbreviation' => ['required', 'string', 'max:5', Rule::unique('translations', 'abbreviation')->ignore($translation->id)],
             'language_id' => ['required', Rule::exists('languages', 'id')],
         ]);

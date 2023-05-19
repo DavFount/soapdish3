@@ -1,5 +1,5 @@
 <script setup>
-import {Head, Link, router} from "@inertiajs/vue3";
+import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import MainSection from "@/Components/MainSection.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import VerseComponent from "@/Components/bible/VerseComponent.vue";
@@ -7,14 +7,18 @@ import Button from "@/Components/bible/button.vue";
 import {computed, onUpdated, ref, watch} from "vue";
 
 const props = defineProps({
+    translations: Object,
     books: Object,
     chapters: Object,
     verses: Object,
+    translation_id: Number,
     book_id: Number,
     chapter_id: Number
 });
 
+const page = usePage();
 const showVersePopup = ref(false);
+const translation = ref(props.translation_id ?? page.props.auth.user.translation_id ?? 'Select a translation');
 const book = ref(props.book_id ?? 'Select a book');
 const chapter = ref(props.chapter_id ?? 'Select a chapter');
 const verseContainer = ref(null);
@@ -54,7 +58,7 @@ watch(book, (newValue, oldValue) => {
     processing.value = true;
     if (newValue > oldValue) bookChange.value = 1; else bookChange.value = 0;
 
-    router.get(route('bible.book', {book: newValue}), {}, {
+    router.get(route('bible.book', {translation: translation.value, book: newValue}), {}, {
         preserveState: true,
         preserveScroll: false,
     });
@@ -66,11 +70,24 @@ watch(chapter, (newValue) => {
     if (newValue === 'Select a chapter' || processing.value) return;
 
     processing.value = true;
-    router.get(route('bible.chapter', {book: book.value, chapter: newValue}), {}, {
+    router.get(route('bible.chapter', {translation: translation.value, book: book.value, chapter: newValue}), {}, {
         preserveState: true,
         preserveScroll: false,
     });
     verseContainer.value.scrollTop = 0;
+});
+
+watch(translation, (newValue) => {
+    if (processing.value) return;
+
+    if (book.value !== 'Select a book' && chapter.value !== 'Select a chapter') {
+        processing.value = true;
+        router.get(route('bible.chapter', {translation: translation.value, book: book.value, chapter: chapter.value}), {}, {
+            preserveState: true,
+            preserveScroll: false,
+        });
+        verseContainer.value.scrollTop = 0;
+    }
 });
 
 const previousBook = () => {
@@ -102,7 +119,18 @@ const nextChapter = () => {
     <MainSection>
         <template #header v-if="props.books.length">
             <div class="flex gap-1 items-center">
+
                 <div>
+                    <InputLabel for="translation" value="Translation" class="sr-only"/>
+                    <select
+                        v-model="translation"
+                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
+                        <option disabled>Select a translation</option>
+                        <option v-for="t in $props.translations" :key="t.id" :value="t.id">{{ t.abbreviation }}</option>
+                    </select>
+                </div>
+
+                <div v-if="translation !== 'Select a translation'">
                     <InputLabel for="book" value="Book" class="sr-only"/>
                     <select
                         @change="manualSelection = true"
@@ -128,14 +156,15 @@ const nextChapter = () => {
 
         </template>
 
-        <div v-if="! $page.props.auth.user.translation_id">
+        <div v-if="translation === 'Select a translation'">
             Please head to your
             <Link :href="route('profile.show')" v-text="'Profile'" class="text-blue-500 hover:underline"/>
-            and set your preferred translation.
+            and set your preferred Bible translation, or select one above.
         </div>
 
         <div ref="verseContainer" class="container overflow-y-scroll" v-else>
-            <VerseComponent @click="showVersePopup = true" class="verse" v-for="verse in props.verses" :key="verse.id" v-if="props.verses"
+            <VerseComponent @click="showVersePopup = true" class="verse" v-for="verse in props.verses" :key="verse.id"
+                            v-if="props.verses"
                             :number="verse.number">
                 {{ verse.text }}
             </VerseComponent>

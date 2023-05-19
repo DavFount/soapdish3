@@ -31,8 +31,8 @@ Route::middleware([
 
     // Bible Routes
     Route::get('/bible', [BibleController::class, 'index'])->name('bible');
-    Route::get('/bible/book/{book}', [BibleController::class, 'book'])->name('bible.book');
-    Route::get('/bible/book/{book}/chapter/{chapter}', [BibleController::class, 'chapter'])->name('bible.chapter');
+    Route::get('/bible/translation/{translation}/book/{book}', [BibleController::class, 'book'])->name('bible.book');
+    Route::get('/bible/translation/{translation}/book/{book}/chapter/{chapter}', [BibleController::class, 'chapter'])->name('bible.chapter');
 
     // Language Routes
     Route::get('/languages', [LanguagesController::class, 'index'])->can('viewAny', Language::class)->name('languages.index');

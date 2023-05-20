@@ -68,6 +68,6 @@ class User extends Authenticatable
     }
 
     public function verses() {
-        return $this->belongsToMany(Verse::class);
+        return $this->belongsToMany(Verse::class)->withPivot(['highlight', 'underline'])->withTimestamps();
     }
 }

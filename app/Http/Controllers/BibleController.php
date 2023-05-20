@@ -11,43 +11,42 @@ use Inertia\Inertia;
 
 class BibleController extends Controller
 {
-    public function index(Request $request)
-    {
-        return Inertia::render('Bible/Index', [
-            'translations' => Translation::with(['language'])->get(),
-            'translation_id' => auth()->user()->translation_id ?? null,
-            'books' => Book::all(),
-            'chapters' => null,
-            'verses' => null,
-            'book_id' => null,
-            'chapter_id' => null,
-        ]);
-    }
-
-    public function book(Translation $translation, Book $book)
+    public function index(Translation $translation = null, Book $book = null, Chapter $chapter = null)
     {
         return Inertia::render('Bible/Index', [
             'translations' => Translation::with(['language'])->get(),
             'books' => Book::all(),
-            'chapters' => $book->chapters,
-            'verses' => null,
-            'translation_id' => $translation->id,
-            'book_id' => $book->id,
-            'chapter_id' => null,
+            'translation_id' => isset($translation->id) ? $translation->id : auth()->user()->translation_id ?? null,
+            'chapters' => $book->chapters ?? null,
+            'verses' => $chapter ? Verse::where('translation_id', $translation->id)->where('book_id', $book->id)->where('chapter_id', $chapter->id)->get() : null,
+            'book_id' => isset($book->id) ? $book->id : null,
+            'chapter_id' => isset($chapter->id) ? $chapter->id : null,
+            'saved_verses' => auth()->user()->verses,
         ]);
     }
 
-    public function chapter(Translation $translation, Book $book, Chapter $chapter)
+    public function saveVerse(Request $request, Translation $translation, Book $book, Chapter $chapter)
     {
-        return Inertia::render('Bible/Index', [
-            'translations' => Translation::with(['language'])->get(),
-            'books' => Book::all(),
-            'chapters' => $book->chapters,
-            'verses' => Verse::where('translation_id', $translation->id)->where('book_id', $book->id)->where('chapter_id', $chapter->id)->get(),
-            'translation_id' => $translation->id,
-            'book_id' => $book->id,
-            'chapter_id' => $chapter->id,
-        ]);
-    }
+        $verses = $request->selectedVerses;
+        $highlight = $request->highlight;
+        $underline = $request->underline;
 
+        foreach ($verses as $verse) {
+            if ($request->user()->verses->contains($verse)) {
+                $request->user()->verses()->detach($verse);
+            }
+            if ($underline || $highlight) {
+                $request->user()->verses()->attach($verse, [
+                    'highlight' => $highlight,
+                    'underline' => $underline,
+                ]);
+            }
+        }
+
+        return redirect()->route('bible', [
+            'translation' => $translation,
+            'book' => $book,
+            'chapter' => $chapter
+        ])->with('message', ['type' => 'success', 'message' => 'Verses Saved!']);
+    }
 }

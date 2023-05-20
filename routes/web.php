@@ -30,9 +30,8 @@ Route::middleware([
     Route::get('/community', [CommunityController::class, 'index'])->name('community.index');
 
     // Bible Routes
-    Route::get('/bible', [BibleController::class, 'index'])->name('bible');
-    Route::get('/bible/translation/{translation}/book/{book}', [BibleController::class, 'book'])->name('bible.book');
-    Route::get('/bible/translation/{translation}/book/{book}/chapter/{chapter}', [BibleController::class, 'chapter'])->name('bible.chapter');
+    Route::get('/bible/{translation?}/{book?}/{chapter?}', [BibleController::class, 'index'])->name('bible');
+    Route::post('/bible/translation/{translation}/book/{book}/chapter/{chapter}', [BibleController::class, 'saveVerse'])->name('bible.save-verse');
 
     // Language Routes
     Route::get('/languages', [LanguagesController::class, 'index'])->can('viewAny', Language::class)->name('languages.index');

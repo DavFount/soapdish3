@@ -78,7 +78,7 @@ class TranslationsController extends Controller
                 }
             }
         }
-        return redirect()->route('translations.index');
+        return redirect()->route('translations.index')->with('message', ['type' => 'success', 'message' => 'Translation Created!']);
     }
 
     public function create()
@@ -121,6 +121,6 @@ class TranslationsController extends Controller
     public function destroy(Translation $translation)
     {
         $translation->delete();
-        return redirect()->route('translations.index');
+        return redirect()->route('translations.index')->with('message', ['type' => 'danger', 'message' => 'Translation Deleted!']);
     }
 }

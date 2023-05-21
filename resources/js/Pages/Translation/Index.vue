@@ -7,16 +7,17 @@ import TableHeaderItem from "@/Components/TableHeaderItem.vue";
 import TableBodyItem from "@/Components/TableBodyItem.vue";
 
 defineProps({
-    translations: Object
+    translations: Object,
+    can: Object,
 })
 </script>
 
 <template>
     <div>
-        <Head title="Translations" />
+        <Head title="Translations"/>
         <MainSection>
             <TableSection title="Languages">
-                <template #button>
+                <template #button v-if="can.create">
                     <Link :href="route('translations.create')"
                           class="block rounded-md bg-blue-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
                         Add Translation
@@ -55,11 +56,13 @@ defineProps({
                     </TableBodyItem>
 
                     <TableBodyItem class="flex gap-3 justify-end">
-                        <Link :href="route('translations.edit', {translation: translation})"
+                        <Link v-if="can.update"
+                              :href="route('translations.edit', {translation: translation})"
                               v-text="'Edit'"
                               class="text-blue-500 hover:underline"
                         />
-                        <Link :href="route('translations.delete', {translation: translation})"
+                        <Link v-if="can.delete"
+                              :href="route('translations.delete', {translation: translation})"
                               method="delete"
                               as="button"
                               v-text="'Delete'"

@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
@@ -39,6 +41,9 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+        'two_factor_confirmed_at',
+        'email_verified_at',
+        'isAdmin',
     ];
 
     /**
@@ -59,6 +64,21 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function updateProfilePhoto(UploadedFile $photo, $storagePath = 'profile-photos')
+    {
+        tap($this->profile_photo_path, function ($previous) use ($photo, $storagePath) {
+            $this->forceFill([
+                'profile_photo_path' => $photo->store(
+                    $storagePath, ['disk' => $this->profilePhotoDisk()]
+                ),
+            ])->save();
+
+            if ($previous) {
+                Storage::disk($this->profilePhotoDisk())->delete($previous);
+            }
+        });
+    }
+
     public function translation() {
         return $this->belongsTo(Translation::class);
     }
@@ -67,7 +87,15 @@ class User extends Authenticatable
         return $this->hasMany(PrayerList::class);
     }
 
+    public function prayerRequest() {
+        return $this->hasMany(PrayerRequest::class);
+    }
+
     public function verses() {
         return $this->belongsToMany(Verse::class)->withPivot(['highlight', 'underline'])->withTimestamps();
+    }
+
+    public function studies() {
+        return $this->hasMany(Study::class);
     }
 }

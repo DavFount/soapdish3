@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import {Head, router} from "@inertiajs/vue3";
 import Card from "@/Components/Community/Card.vue";
 import Pagination from "@/Components/Pagination.vue";
@@ -8,14 +8,24 @@ import debounce from "lodash/debounce";
 
 const props = defineProps({
     users: Object,
-    filters: Object
+    filters: Array
 });
 
 const search = ref(props.filters.search);
 
 watch(search, debounce(function (value) {
-    router.get('/community', { search: value }, { preserveState: true, replace: true });
+    router.get(route('community.index'), { search: value }, { preserveState: true, replace: true });
 }, 300));
+
+const memberCount = computed(() => {
+   return Object.keys(props.users).length;
+});
+
+const userRole = (role) => {
+    if(role) return role.charAt(0).toUpperCase() + role.slice(1);
+
+    return 'Owner';
+}
 </script>
 
 <template>
@@ -24,20 +34,24 @@ watch(search, debounce(function (value) {
 
         <MainSection>
 
-            <template #header v-if="users.data.length > 0">
-                <input v-model="search" type="text" placeholder="Search..." class="border px-2 rounded-lg" />
+            <template #header>
+                <input v-model="search"
+                       type="text"
+                       placeholder="Search..."
+                       class="mt-1 block border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm" />
             </template>
 
-            <div class="grid grid-cols-3 gap-4" v-if="users.data.length > 0">
-                <div v-for="user in users.data" :key="user.id">
+            <div class="grid grid-cols-3 gap-4" v-if="memberCount">
+                <div v-for="user in users" :key="user.id">
                     <Card>
                         <template #avatar>
-                            <img class="h-16 w-16 rounded-full object-cover border border-gray-300" :src="user.avatar"
+                            <img class="h-16 w-16 rounded-full object-cover border border-gray-400 dark:border-gray-600" :src="user.profile_photo_url"
                                  :alt="user.name">
                         </template>
 
                         <template #header>
                             {{ user.name }}
+                            <span class="text-xs text-gray-400 dark:text-gray-600 ml-1">{{ userRole(user.membership ? user.membership.role : null) }}</span>
                         </template>
 
                         <template #title>
@@ -45,10 +59,10 @@ watch(search, debounce(function (value) {
                         </template>
 
                         <template #socials
-                                  v-if="user.socials.facebook || user.socials.twitter || user.socials.instagram">
+                                  v-if="user.facebook || user.twitter || user.instagram">
                             <div class="flex justify-start gap-x-4">
-                                <div v-if="user.socials.facebook">
-                                    <a :href="'https://www.facebook.com/' + user.socials.facebook" target="_blank">
+                                <div v-if="user.facebook">
+                                    <a :href="'https://www.facebook.com/' + user.facebook" target="_blank">
                                         <svg fill="#6b7280" viewBox="0 0 1920 1920"
                                              class="w-6 h-6"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -58,8 +72,8 @@ watch(search, debounce(function (value) {
                                         </svg>
                                     </a>
                                 </div>
-                                <div v-if="user.socials.twitter">
-                                    <a :href="'https://twitter.com/' + user.socials.twitter" target="_blank">
+                                <div v-if="user.twitter">
+                                    <a :href="'https://twitter.com/' + user.twitter" target="_blank">
                                         <svg fill="#6b7280" xmlns="http://www.w3.org/2000/svg"
                                              preserveAspectRatio="xMidYMid"
                                              class="w-6 h-6"
@@ -70,8 +84,8 @@ watch(search, debounce(function (value) {
                                         </svg>
                                     </a>
                                 </div>
-                                <div v-if="user.socials.instagram">
-                                    <a :href="'https://www.instagram.com/' + user.socials.instagram" target="_blank">
+                                <div v-if="user.instagram">
+                                    <a :href="'https://www.instagram.com/' + user.instagram" target="_blank">
                                         <svg viewBox="0 0 192 192"
                                              class="w-6 h-6"
                                              xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -91,7 +105,7 @@ watch(search, debounce(function (value) {
             <div v-else>
                 There are currently no members on this team.
             </div>
-            <Pagination v-if="users.last_page > 1" :links="users.links" class="mt-6"/>
+<!--            <Pagination v-if="users.last_page > 1" :links="users.links" class="mt-6"/>-->
         </MainSection>
     </div>
 </template>

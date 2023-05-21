@@ -42,15 +42,6 @@ const debug = () => {
     }
 }
 
-// onUpdated(() => {
-//     console.log('DOM Update', debug());
-//     processing.value = false;
-//     if (bookChange.value !== null) {
-//         console.log('Calling Setting Chapter Value', debug());
-//         setChapterValue();
-//     }
-// });
-
 const firstChapter = computed(() => {
     return props.chapters && chapter.value === props.chapters[0].id;
 });
@@ -73,11 +64,9 @@ watch(book, (newValue, oldValue) => {
     processing.value = true;
     if (newValue > oldValue) bookChange.value = 1; else bookChange.value = 0;
 
-    console.log('Processing Book Change', debug());
 
     selectedVerses.value = [];
     verseContainer.value.scrollTop = 0;
-    // chapter.value = 'Select a chapter';
 
     router.visit(route('bible', {translation: translation.value, book: newValue}), {
         only: ['books', 'book_id', 'translation_id', 'chapters'],
@@ -99,7 +88,6 @@ const processBookChange = (chapters) => {
 }
 
 watch(chapter, (newValue) => {
-    console.log('Processing Chapter Change', debug());
 
     if (newValue === 'Select a chapter' || processing.value) return;
 
@@ -179,7 +167,7 @@ const isUnderlined = (id) => {
         return v.id === id;
     });
 
-    if(newVerse.length) {
+    if (newVerse.length) {
         return newVerse[0].pivot.underline;
     }
     return '';
@@ -190,7 +178,7 @@ const isHighlighted = (id) => {
         return v.id === id;
     });
 
-    if(newVerse.length) {
+    if (newVerse.length) {
         return newVerse[0].pivot.highlight;
     }
     return '';
@@ -232,15 +220,15 @@ const increaseTextSize = () => {
     <Head title="Bible"/>
     <MainSection>
         <template #header v-if="props.books.length">
-            <div class="flex justify-between">
+            <div class="block sm:flex justify-between">
                 <div>
-                    <div class="flex gap-1 items-center">
+                    <div class="block sm:flex gap-1 items-center">
 
                         <div>
                             <InputLabel for="translation" value="Translation" class="sr-only"/>
                             <select
                                 v-model="translation"
-                                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
+                                class="w-full sm:w-auto border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
                                 <option disabled>Select a translation</option>
                                 <option v-for="t in $props.translations" :key="t.id" :value="t.id">{{
                                         t.abbreviation
@@ -249,22 +237,22 @@ const increaseTextSize = () => {
                             </select>
                         </div>
 
-                        <div v-if="translation !== 'Select a translation'">
+                        <div v-if="translation !== 'Select a translation'" class="mt-3 sm:mt-0">
                             <InputLabel for="book" value="Book" class="sr-only"/>
                             <select
                                 @change="manualSelection = true"
                                 v-model="book"
-                                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
+                                class="w-full sm:w-auto border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
                                 <option disabled>Select a book</option>
                                 <option v-for="b in $props.books" :key="b.id" :value="b.id">{{ b.name }}</option>
                             </select>
                         </div>
 
-                        <div v-if="book !== 'Select a book'">
+                        <div v-if="book !== 'Select a book'" class="mt-3 sm:mt-0">
                             <InputLabel for="chapter" value="Book" class="sr-only"/>
                             <select
                                 v-model="chapter"
-                                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
+                                class="w-full sm:w-auto border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-md shadow-sm">
                                 <option disabled>Select a chapter</option>
                                 <option v-for="c in $props.chapters" :key="c.id" :value="c.id">
                                     {{ c.number }}
@@ -274,7 +262,7 @@ const increaseTextSize = () => {
                     </div>
                 </div>
 
-                <div class="flex align-bottom items-end gap-x-8">
+                <div class="mt-3 sm:mt-0 flex align-bottom items-end gap-x-8">
                     <button
                         @click="decreaseTextSize"
                         class="py-0.5 px-1 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm">

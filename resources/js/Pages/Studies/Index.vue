@@ -1,8 +1,10 @@
 <script setup>
+import {Head} from "@inertiajs/vue3";
 
 </script>
 
 <template>
+    <Head title="Studies"/>
 
 </template>
 
@@ -12,9 +14,9 @@
 
 
 <script>
-import DefaultLayout from "@/Layouts/DefaultLayout.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 export default {
-    layout: DefaultLayout,
+    layout: AdminLayout,
 }
 </script>

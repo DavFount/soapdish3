@@ -6,9 +6,9 @@ defineProps({
 
 <template>
     <div class="bg-gray-100 dark:bg-gray-900 border border-gray-400 dark:border-gray-700 shadow-xl px-4 py-5 sm:px-6 rounded-md h-44 w-full">
-        <div class="flex items-center justify-center">
+        <div class="flex items-center justify-start">
             <div>
-                <div class="flex items-center">
+                <div class="flex align-text-top">
                     <!-- Avatar -->
                     <div v-if="$slots.avatar" class="flex-shrink-0">
                         <slot name="avatar" />

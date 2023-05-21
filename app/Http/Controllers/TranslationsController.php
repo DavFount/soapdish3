@@ -24,7 +24,14 @@ class TranslationsController extends Controller
                 })
                 ->paginate($request->input('perPage') ?? 10)
                 ->withQueryString(),
-            'filters' => $request->only(['search', 'perPage'])
+            'filters' => $request->only(['search', 'perPage']),
+            'can' => [
+                'viewAny' => $request->user()->isAdmin,
+                'create' => $request->user()->isAdmin,
+                'view' => $request->user()->isAdmin,
+                'update' => $request->user()->isAdmin,
+                'delete' => $request->user()->isAdmin,
+            ]
         ]);
     }
 

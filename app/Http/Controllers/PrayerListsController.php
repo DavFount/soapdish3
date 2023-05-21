@@ -13,6 +13,7 @@ class PrayerListsController extends Controller
         return Inertia::render('PrayerList/Index', [
             'prayerLists' => PrayerList::query()
                 ->orderBy('created_at')
+                ->where('user_id', $request->user()->id)
                 ->when($request->input('search'), function ($query, $search) {
                     $query->where('name', 'like', "%{$search}%");
                 })

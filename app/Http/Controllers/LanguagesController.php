@@ -9,13 +9,20 @@ use Inertia\Inertia;
 
 class LanguagesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('Language/Index', [
             'languages' => Language::query()
                 ->orderBy('name')
                 ->with(['translations'])
                 ->paginate(10),
+            'can' => [
+                'viewAny' => $request->user()->isAdmin,
+                'create' => $request->user()->isAdmin,
+                'view' => $request->user()->isAdmin,
+                'update' => $request->user()->isAdmin,
+                'delete' => $request->user()->isAdmin,
+            ]
         ]);
     }
 

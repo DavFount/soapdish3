@@ -1,5 +1,6 @@
 <script setup>
 import NavBarMobileItem from "@/Components/Nav/NavBarMobileItem.vue";
+import ThemeSwitcher from "@/Components/Nav/ThemeSwitcher.vue";
 
 defineEmits(['toggle'])
 </script>
@@ -11,6 +12,7 @@ defineEmits(['toggle'])
                 <NavBarMobileItem :href="route('home')" :active="$page.component == 'Home'" v-text="'Home'"/>
                 <NavBarMobileItem :href="route('bible')" :active="$page.component == 'Bible/Index'" v-text="'Bible'"/>
                 <NavBarMobileItem :href="route('dashboard')" :active="$page.component == 'Dashboard'" v-text="'Dashboard'"/>
+                <ThemeSwitcher class="block lg:hidden" />
             </div>
         </div>
     </div>

@@ -8,10 +8,10 @@ defineProps({
 
 <template>
     <Link
-       class="block rounded-md px-3 py-2 text-base font-medium"
+       class="block rounded-md px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300"
        :class="{
-        'text-gray-300 hover:bg-gray-700 hover:text-white': ! active,
-        'bg-gray-900 text-white': active
+        'hover:bg-gray-300 dark:hover:bg-gray-900': ! active,
+        'bg-gray-300 dark:bg-gray-900': active
        }"
     ><slot /></Link>
 </template>
